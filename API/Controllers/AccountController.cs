@@ -34,7 +34,9 @@ public class AccountController : BaseApiController
         {
             UserName = registerDto.Username.ToLower(),
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
+            PasswordSalt = hmac.Key,
+            FavoriteGenresIds = registerDto.FavoriteGenresIds,
+            FavoriteMoviesIds = registerDto.FavoriteMoviesIds
         };
 
         _context.Users.Add(user);
