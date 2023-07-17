@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {NgModel} from "@angular/forms";
+import {AccountService} from "../_services/account.service";
 
 @Component({
   selector: 'app-register',
@@ -6,6 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  model: any = {};
+  registered = false;
+  constructor(private accountService: AccountService) {
+
+  }
+
   genres: Genre[] = [
     { id: 1, name: 'Action' },
     { id: 2, name: 'Comedy' },
@@ -14,7 +22,6 @@ export class RegisterComponent {
     { id: 5, name: 'Horror' },
     // Add more genres as needed
   ];
-  selectedGenres: Genre[] = [];
 
   movies: Movie[] = [
     { id: 1, name: 'The Shawshank Redemption' },
@@ -24,6 +31,7 @@ export class RegisterComponent {
     { id: 5, name: 'The Lord of the Rings: The Return of the King' },
     { id: 6, name: 'Pulp Fiction' },
   ];
+  selectedGenres: Genre[] = [];
   selectedMovies: Movie[] = [];
   toggleGenre(genreId: number) {
     const index = this.selectedGenres.findIndex(genre => genre.id === genreId);
@@ -48,10 +56,22 @@ export class RegisterComponent {
     }
   }
 
-  submit() {
-    console.log(this.selectedGenres);
-    console.log(this.selectedMovies);
+  register() {
+    // get a list of ids from the selected genres
+    this.model.favoriteGenresIds = this.selectedGenres.map(genre => genre.id);
+    this.model.favoriteMoviesIds = this.selectedMovies.map(movie => movie.id);
+    console.log(this.model)
+
+    this.accountService.register(this.model).subscribe(response => {
+      console.log(response);
+      this.registered = true;
+    }
+    , error => {
+      console.log(error);
+    });
   }
+
+  protected readonly NgModel = NgModel;
 }
 export interface Genre {
   id: number;

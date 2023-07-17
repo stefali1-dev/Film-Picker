@@ -22,100 +22,85 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("BLOB");
 
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("BLOB");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("API.Entities.Genre", b =>
+            modelBuilder.Entity("API.Entities.FavoriteGenre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Genres");
-                });
-
-            modelBuilder.Entity("API.Entities.Movie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Movies");
-                });
-
-            modelBuilder.Entity("UserFavoriteGenres", b =>
-                {
                     b.Property<int>("GenreId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GenreId", "UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserFavoriteGenres");
                 });
 
-            modelBuilder.Entity("UserFavoriteMovies", b =>
+            modelBuilder.Entity("API.Entities.FavoriteMovie", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MovieId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("MovieId", "UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserFavoriteMovies");
                 });
 
-            modelBuilder.Entity("UserFavoriteGenres", b =>
+            modelBuilder.Entity("API.Entities.FavoriteGenre", b =>
                 {
-                    b.HasOne("API.Entities.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", null)
-                        .WithMany()
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany("FavoriteGenres")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserFavoriteMovies", b =>
+            modelBuilder.Entity("API.Entities.FavoriteMovie", b =>
                 {
-                    b.HasOne("API.Entities.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", null)
-                        .WithMany()
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany("FavoriteMovies")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entities.AppUser", b =>
+                {
+                    b.Navigation("FavoriteGenres");
+
+                    b.Navigation("FavoriteMovies");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,28 +23,48 @@ public class AccountController : BaseApiController
     [HttpPost("register")] // POST: api/account/register
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        if (await UserExists(registerDto.Username))
+        if (await UserExists(registerDto.Email))
         {
-            return BadRequest("Username is taken");
+            return BadRequest("Email is taken");
         }
         
         using var hmac = new HMACSHA512();
         
         var user = new AppUser
         {
-            UserName = registerDto.Username.ToLower(),
+            Email = registerDto.Email.ToLower(),
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key,
-            FavoriteGenresIds = registerDto.FavoriteGenresIds,
-            FavoriteMoviesIds = registerDto.FavoriteMoviesIds
+            PasswordSalt = hmac.Key
         };
+        
+        user.FavoriteGenres = new List<FavoriteGenre>();
+        foreach (var genreId in registerDto.FavoriteGenresIds)
+        {
+            user.FavoriteGenres.Add(new FavoriteGenre
+            {
+                User = user,
+                UserId = user.Id,
+                GenreId = genreId
+            });
+        }
+        
+        user.FavoriteMovies = new List<FavoriteMovie>();
+        foreach (var movieId in registerDto.FavoriteMoviesIds)
+        {
+            user.FavoriteMovies.Add(new FavoriteMovie
+            {
+                User = user,
+                UserId = user.Id,
+                MovieId = movieId
+            });
+        }
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
         return new UserDto
         {
-            Username = user.UserName,
+            Email = user.Email,
             Token = _tokenService.CreateToken(user)
         };
     }
@@ -52,11 +72,11 @@ public class AccountController : BaseApiController
     [HttpPost("login")] // POST: api/account/login
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username);
+        var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
         if (user == null)
         {
-            return Unauthorized("Invalid username");
+            return Unauthorized("Invalid Email");
         }
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
@@ -73,13 +93,13 @@ public class AccountController : BaseApiController
 
         return new UserDto
         {
-            Username = user.UserName,
+            Email = user.Email,
             Token = _tokenService.CreateToken(user)
         };
     }
     
-    private async Task<bool> UserExists(string username)
+    private async Task<bool> UserExists(string email)
     {
-        return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
+        return await _context.Users.AnyAsync(x => x.Email == email.ToLower());
     }
 }

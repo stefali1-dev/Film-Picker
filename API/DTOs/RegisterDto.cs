@@ -6,10 +6,10 @@ namespace API.DTOs;
 public class RegisterDto
 {
     [Required]
-    public string Username { get; set; }
+    public string Email { get; set; }
     [Required]
     public string Password { get; set; }
     
-    public List<Genre> FavoriteGenresIds  { get; set; }
-    public List<Movie> FavoriteMoviesIds  { get; set; }
+    public List<int> FavoriteGenresIds  { get; set; }
+    public List<int> FavoriteMoviesIds  { get; set; }
 }
