@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {NgModel} from "@angular/forms";
 import {AccountService} from "../_services/account.service";
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-register',
@@ -8,31 +10,30 @@ import {AccountService} from "../_services/account.service";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  model: any = {};
-  registered = false;
-  constructor(private accountService: AccountService) {
-
-  }
-
   genres: Genre[] = [
-    { id: 1, name: 'Action' },
-    { id: 2, name: 'Comedy' },
-    { id: 3, name: 'Drama' },
-    { id: 4, name: 'Thriller' },
-    { id: 5, name: 'Horror' },
-    // Add more genres as needed
-  ];
-
-  movies: Movie[] = [
-    { id: 1, name: 'The Shawshank Redemption' },
-    { id: 2, name: 'The Godfather' },
-    { id: 3, name: 'The Dark Knight' },
-    { id: 4, name: 'The Godfather: Part II' },
-    { id: 5, name: 'The Lord of the Rings: The Return of the King' },
-    { id: 6, name: 'Pulp Fiction' },
+    { id: 28, name: 'Action' },
+    { id: 12, name: 'Adventure' },
+    { id: 16, name: 'Animation' },
+    { id: 35, name: 'Comedy' },
+    { id: 80, name: 'Crime' },
+    { id: 99, name: 'Documentary' },
+    { id: 18, name: 'Drama' },
+    { id: 10751, name: 'Family' },
+    { id: 14, name: 'Fantasy' },
+    { id: 36, name: 'History' },
+    { id: 27, name: 'Horror' },
+    { id: 10402, name: 'Music' },
+    { id: 9648, name: 'Mystery' },
+    { id: 10749, name: 'Romance' },
+    { id: 878, name: 'Science Fiction' },
+    { id: 10770, name: 'TV Movie' },
+    { id: 53, name: 'Thriller' },
+    { id: 10752, name: 'War' },
+    { id: 37, name: 'Western' }
   ];
   selectedGenres: Genre[] = [];
-  selectedMovies: Movie[] = [];
+  containerHeight = 200; // Specify the desired height in pixels
+
   toggleGenre(genreId: number) {
     const index = this.selectedGenres.findIndex(genre => genre.id === genreId);
     if (index > -1) {
@@ -44,22 +45,37 @@ export class RegisterComponent {
       }
     }
   }
-  toggleMovie(movieId: number) {
-    const index = this.selectedMovies.findIndex(movie => movie.id === movieId);
-    if (index > -1) {
-      this.selectedMovies.splice(index, 1);
-    } else {
-      const movie = this.movies.find(movie => movie.id === movieId);
-      if (movie) {
-        this.selectedMovies.push(movie);
-      }
-    }
+
+  paragraphs: string[] = [];
+  movieName: string = '';
+
+  addParagraph(text: string) {
+    this.paragraphs.push(text);
   }
 
+  model: any = {};
+  registered = true;
+  retypedPassword = '';
+  constructor(private accountService: AccountService, private router: Router) {
+
+  }
+
+  searchMovie() {
+    // TODO: send a request to the server to search for the movie
+    this.addParagraph("da")
+    this.addParagraph("da")
+    this.addParagraph("da")
+  }
   register() {
+
+    if(this.model.password !== this.retypedPassword){
+      console.log("Passwords do not match")
+      return;
+    }
+
     // get a list of ids from the selected genres
-    this.model.favoriteGenresIds = this.selectedGenres.map(genre => genre.id);
-    this.model.favoriteMoviesIds = this.selectedMovies.map(movie => movie.id);
+    this.model.favoriteGenresIds = [];
+    this.model.favoriteMoviesIds = [];
     console.log(this.model)
 
     this.accountService.register(this.model).subscribe(response => {
@@ -69,15 +85,18 @@ export class RegisterComponent {
     , error => {
       console.log(error);
     });
+
+
+  }
+
+  submitTastes() {
+    // TODO: send the selected genres and movies to the server
   }
 
   protected readonly NgModel = NgModel;
 }
+
 export interface Genre {
-  id: number;
-  name: string;
-}
-export interface Movie {
   id: number;
   name: string;
 }

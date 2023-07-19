@@ -1,36 +1,54 @@
-<app-nav> </app-nav>
 
-<div class="container">
-  <div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Sign In</h2>
-          <form #loginForm="ngForm" (ngSubmit)="login()">
-            <div class="form-group mb-4">
-              <label for="email">Email</label>
-              <input
-                name = "email"
-                [(ngModel)]="model.email"
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="Enter your email" required>
+<app-nav></app-nav>
+
+<section class="gradient-custom">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-6">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <form class="mb-md-5 mt-md-4 pb-5"   #loginForm="ngForm" (ngSubmit)="login()">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <p class="text-white-50 mb-5">Please enter your email and password!</p>
+
+              <div class="form-outline form-white mb-4">
+                <input
+                  name = "email"
+                  type="email"
+                  [(ngModel)]="model.email"
+                  id="typeEmailX"
+                  class="form-control form-control-lg"
+                  placeholder="Email"
+                />
+              </div>
+
+              <div class="form-outline form-white mb-4">
+                <input
+                  name="password"
+                  type="password"
+                  [(ngModel)]="model.password"
+                  id="typePasswordX"
+                  class="form-control form-control-lg"
+                  placeholder="Password"
+                />
+              </div>
+
+              <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+
+              <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+            </form>
+
+            <div>
+              <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
+              </p>
             </div>
-            <div class="form-group mb-4">
-              <label for="password">Password</label>
-              <input
-                name = "password"
-                [(ngModel)]="model.password"
-                type="password"
-                class="form-control"
-                id="password"
-                placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block mb-4">Sign In</button>
-          </form>
+
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
