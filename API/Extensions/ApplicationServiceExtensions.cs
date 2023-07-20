@@ -19,6 +19,11 @@ public static class ApplicationServiceExtensions
                 .AllowAnyMethod().WithOrigins("http://localhost:4200"));
         });
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ITmdbApiService>(provider =>
+        {
+            string bearerToken = "Bearer " + config["TmdbTokenKey"];
+            return new TmdbApiService(bearerToken);
+        });
         return services;
     }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NgModel} from "@angular/forms";
 import {AccountService} from "../_services/account.service";
 import { Router } from '@angular/router';
+import {Movie} from "../_models/movie";
 
 
 @Component({
@@ -60,11 +61,32 @@ export class RegisterComponent {
 
   }
 
+  movieList: Movie[] = [];
+  selectedMovies: Set<Movie> = new Set();
   searchMovie() {
-    // TODO: send a request to the server to search for the movie
-    this.addParagraph("da")
-    this.addParagraph("da")
-    this.addParagraph("da")
+    this.accountService.searchMovie(this.movieName).subscribe(response => {
+      this.movieList = response;
+
+      // add to every member of movieList, at the attribute poster_path, the prefix of "https://image.tmdb.org/t/p/original"
+      for (let movie of this.movieList) {
+        if (movie.poster_path) {
+          movie.poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path;
+        }
+      }
+
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  selectMovie(movie: Movie) {
+    this.selectedMovies.add(movie);
+    this.clearResults();
+  }
+
+  clearResults() {
+    this.movieList = [];
+    this.movieName = '';
   }
   register() {
 
@@ -89,14 +111,25 @@ export class RegisterComponent {
 
   }
 
+  tastesModel: any = {};
   submitTastes() {
-    // TODO: send the selected genres and movies to the server
+    this.tastesModel.FavoriteGenresIds = this.selectedGenres.map(genre => genre.id);
+    this.tastesModel.FavoriteMoviesIds = Array.from(this.selectedMovies).map(movie => movie.id);
+
+    this.accountService.updateTastes(this.tastesModel).subscribe(response => {
+      console.log(response);
+      this.router.navigateByUrl('');
+    },error => {
+      console.log(error);
+    });
   }
 
   protected readonly NgModel = NgModel;
+
+
 }
 
-export interface Genre {
+export interface Genre{
   id: number;
   name: string;
 }

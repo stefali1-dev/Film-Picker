@@ -35,5 +35,14 @@ public class DataContext : DbContext
             .HasOne(i => i.User)
             .WithMany(u => u.FavoriteMovies)
             .HasForeignKey(i => i.UserId);
+        
+        // Make GenreId and MovieId unique in their respective tables
+        modelBuilder.Entity<FavoriteGenre>()
+            .HasIndex(i => i.GenreId)
+            .IsUnique();
+
+        modelBuilder.Entity<FavoriteMovie>()
+            .HasIndex(i => i.MovieId)
+            .IsUnique();
     }
 }

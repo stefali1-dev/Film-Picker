@@ -76,14 +76,48 @@
                 </div>
 
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                  <h4 class="mt-2">Favorite Movies</h4>
+                  <h3 class="mt-2">Favorite Movies</h3>
+
+                  <div *ngIf="selectedMovies.size > 0">
+                    <h4>Selected:</h4>
+
+                    <div class="container">
+                      <div class="row justify-content-center">
+                        <ng-container *ngFor="let movie of selectedMovies">
+                          <div class="col-md-4 mb-4 mx-1 border" style="border-radius: 1rem;">
+                            <img class="w-75 mt-2" [src]="movie.poster_path" alt="MoviePoster" style="border-radius: 1rem;">
+                            <p class="mt-2">{{ movie.title }}</p>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                  </div>
                   <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Enter Movie Name" [(ngModel)]="movieName" (keydown.enter)="this.searchMovie()">
+                    <input type="text" class="form-control" placeholder="Enter Movie Name"
+                           name="movieName"
+                           [(ngModel)]="movieName" (keydown.enter)="this.searchMovie()">
                     <button class="btn btn-outline-light" type="button" (click)="this.searchMovie()">Search</button>
                   </div>
-                  <div *ngIf="paragraphs.length > 0">
+                  <div *ngIf="movieList.length > 0">
                     <h3>Results:</h3>
-                    <p *ngFor="let paragraph of paragraphs">{{ paragraph }}</p>
+
+                    <div class="container">
+                      <div class="row justify-content-center align-items-center flex-wrap
+                       mb-4 mx-4 border btn btn-outline-light d-flex"
+                            style="border-radius: 1rem;"
+                           *ngFor="let movie of movieList"
+                           (click)="this.selectMovie(movie)">
+
+                          <img class="col-md-4 m-2" [src]="movie.poster_path"
+                               alt="MoviePoster" style="border-radius: 1rem;" >
+                          <h4 class="col">{{ movie.title }}</h4>
+                        </div>
+
+                    </div>
+
+
+
                   </div>
                 </div>
 

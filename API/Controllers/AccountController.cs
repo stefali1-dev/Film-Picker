@@ -94,6 +94,7 @@ public class AccountController : BaseApiController
         return new UserDto
         {
             Email = user.Email,
+            UserId = user.Id,
             Token = _tokenService.CreateToken(user)
         };
     }

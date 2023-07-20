@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map} from "rxjs";
 import {User} from "../_models/user";
+import {Movie} from "../_models/movie";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,16 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+  }
+
+  searchMovie(movieName: string) {
+    return this.http.get<Movie[]>(this.baseUrl + 'movie/search/' + movieName);
+
+  }
+
+  updateTastes(tastesModel: any) {
+    // get userId from local storage
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').userId;
+    return this.http.put(this.baseUrl + `users/${userId}/tastes`, tastesModel);
   }
 }
