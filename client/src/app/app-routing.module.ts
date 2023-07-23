@@ -7,6 +7,9 @@ import {MovieListComponent} from "./movies/movie-list/movie-list.component";
 import {MovieDetailComponent} from "./movies/movie-detail/movie-detail.component";
 import {ListsComponent} from "./lists/lists.component";
 import {AuthGuard} from "./_guards/auth.guard";
+import {TestErrorComponent} from "./errors/test-error/test-error.component";
+import {NotFoundComponent} from "./errors/not-found/not-found.component";
+import {ServerErrorComponent} from "./errors/server-error/server-error.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -21,7 +24,10 @@ const routes: Routes = [
   },
   { path: 'login', component: SigninComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: 'errors', component: TestErrorComponent},
+  { path: 'not-found', component: NotFoundComponent},
+  {path: 'server-error', component: ServerErrorComponent},
+  { path: '**', component: NotFoundComponent, pathMatch: 'full' }
 
 ];
 @NgModule({

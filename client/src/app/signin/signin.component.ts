@@ -21,7 +21,6 @@ export class SigninComponent {
       }
       , error => {
         console.log(error);
-        this.toastr.error(error.error);
       });
   }
 
