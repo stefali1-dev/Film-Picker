@@ -17,6 +17,7 @@ public class UsersController : BaseApiController
         _context = context;
     } 
     
+    [AllowAnonymous]
     [HttpGet] // GET: api/users
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {

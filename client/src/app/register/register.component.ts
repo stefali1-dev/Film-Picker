@@ -55,7 +55,7 @@ export class RegisterComponent {
   }
 
   model: any = {};
-  registered = true;
+  registered = false;
   retypedPassword = '';
   constructor(private accountService: AccountService, private router: Router) {
 

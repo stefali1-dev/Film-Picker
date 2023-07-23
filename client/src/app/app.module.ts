@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -9,9 +8,13 @@ import { NavComponent } from './nav/nav.component';
 import { FormsModule } from "@angular/forms";
 import { SigninComponent } from './signin/signin.component';
 import { RegisterComponent } from './register/register.component';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './_services/auth-interceptor.service';
+import { MovieListComponent } from './movies/movie-list/movie-list.component';
+import { MovieDetailComponent } from './movies/movie-detail/movie-detail.component';
+import { ListsComponent } from './lists/lists.component';
+import { FooterComponent } from './footer/footer.component';
+import {SharedModule} from "./_modules/shared.module";
 
 @NgModule({
   declarations: [
@@ -19,7 +22,11 @@ import { AuthInterceptor } from './_services/auth-interceptor.service';
     NavComponent,
     SigninComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    MovieListComponent,
+    MovieDetailComponent,
+    ListsComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +34,7 @@ import { AuthInterceptor } from './_services/auth-interceptor.service';
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    BsDropdownModule.forRoot()
+    SharedModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
