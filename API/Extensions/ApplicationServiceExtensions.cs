@@ -24,6 +24,7 @@ public static class ApplicationServiceExtensions
             string bearerToken = "Bearer " + config["TmdbTokenKey"];
             return new TmdbApiService(bearerToken);
         });
+        services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }
 }
