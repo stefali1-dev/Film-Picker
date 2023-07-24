@@ -12,21 +12,14 @@ public class AppUser
     
     public List<FavoriteGenre> FavoriteGenres { get; set; }
     public List<FavoriteMovie> FavoriteMovies { get; set; }
-}
-
-public class FavoriteGenre
-{
-    public int Id { get; set; }
-    public AppUser User { get; set; }
-    public int UserId { get; set; }
-    public int GenreId { get; set; }
-}
-
-public class FavoriteMovie
-{
-    public int Id { get; set; }
-    public AppUser User { get; set; }
-
-    public int UserId { get; set; }
-    public int MovieId { get; set; }
+    
+    public List<int> GetFavoriteGenresIds()
+    {
+        return FavoriteGenres.Select(fg => fg.GenreId).ToList();
+    }
+    
+    public List<int> GetFavoriteMoviesIds()
+    {
+        return FavoriteMovies.Select(fm => fm.MovieId).ToList();
+    }
 }

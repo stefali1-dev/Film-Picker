@@ -25,6 +25,7 @@ public static class ApplicationServiceExtensions
             return new TmdbApiService(bearerToken);
         });
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         return services;
     }
 }

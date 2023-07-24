@@ -11,10 +11,7 @@ public class DataContext : DbContext
     }
 
     public DbSet<AppUser> Users { get; set; }
-    public DbSet<FavoriteGenre> UserFavoriteGenres { get; set; }
-    public DbSet<FavoriteMovie> UserFavoriteMovies { get; set; }
-    
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AppUser>()
