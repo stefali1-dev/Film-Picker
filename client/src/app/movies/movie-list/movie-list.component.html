@@ -1,1 +1,5 @@
-<p>movie-list works!</p>
+<div class="row m-5">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let movie of movieList">
+    <app-movie-card [movie]="movie"></app-movie-card>
+  </div>
+</div>

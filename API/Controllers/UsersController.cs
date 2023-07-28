@@ -32,20 +32,25 @@ public class UsersController : BaseApiController
         return Ok(usersToReturn);
     }
     
-    [HttpGet("{email}")] // GET: api/users/5
-    public async Task<ActionResult<MemberDto>> GetUser(string email)
+    [HttpGet("{id}")] // GET: api/users/5
+    public async Task<ActionResult<MemberDto>> GetUser(int id)
     {
-        var user = await _userRepository.GetUserByEmailAsync(email);
+        var user = await _userRepository.GetUserByIdAsync(id);
 
         return _mapper.Map<MemberDto>(user);
     }
 
-    [HttpPut("{email}/tastes")] // PUT: api/users/5/tastes
-    public async Task<ActionResult> UpdateTastes(TastesDto tastesDto, string email)
+    [HttpPut("{id}/tastes")] // PUT: api/users/5/tastes
+    public async Task<ActionResult> UpdateTastes(TastesDto tastesDto, int id)
     {
         try
         {
-            var user = await _userRepository.GetUserByEmailAsync(email);
+            if(tastesDto.FavoriteGenresIds.Count == 0 && tastesDto.FavoriteMoviesIds.Count == 0)
+            {
+                return BadRequest("You must select at least one genre or movie.");
+            }
+            
+            var user = await _userRepository.GetUserByIdAsync(id);
 
             if (user == null)
             {
@@ -55,8 +60,9 @@ public class UsersController : BaseApiController
             var userId = user.Id;
 
             // Update the favorite genres of the user
-            var favoriteGenresToAdd = user.GetFavoriteGenresIds().Select(genreId => new FavoriteGenre
+            var favoriteGenresToAdd = tastesDto.FavoriteGenresIds.Select(genreId => new FavoriteGenre
             {
+                User = user,
                 UserId = userId,
                 GenreId = genreId
             });
@@ -64,20 +70,20 @@ public class UsersController : BaseApiController
             user.FavoriteGenres.AddRange(favoriteGenresToAdd);
 
             // Update the favorite movies of the user
-            var favoriteMoviesIds = tastesDto.FavoriteMoviesIds;
-            var favoriteMoviesToAdd = favoriteMoviesIds.Select(movieId => new FavoriteMovie
+            var favoriteMoviesToAdd = tastesDto.FavoriteMoviesIds.Select(movieId => new FavoriteMovie
             {
+                User = user,
                 UserId = userId,
                 MovieId = movieId
             });
 
             user.FavoriteMovies.AddRange(favoriteMoviesToAdd);
 
-            // Save the changes to the database using the userRepository instead of _context
+            // Save the changes to the database using the userRepository
             await _userRepository.SaveAllAsync();
+
             return Ok();
         }
-
         catch (DbUpdateException ex)
         {
             // Check if the inner exception is a SqliteException with error code 19 (UNIQUE constraint violation)
@@ -93,6 +99,14 @@ public class UsersController : BaseApiController
                 throw;
             }
         }
+    }
+    
+    [HttpGet("{id}/recommended-movies")] // GET: api/users/5/recommended-movies
+    public async Task<ActionResult<IEnumerable<MovieDto>>> GetRecommendedMovies(int id)
+    {
+        var recommendedMovies = await _userRepository.GetRecommendedMoviesAsync(id);
+
+        return Ok(recommendedMovies);
     }
 
 }

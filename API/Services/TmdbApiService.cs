@@ -22,6 +22,20 @@ public class TmdbApiService : ITmdbApiService
 
     }
 
+    private void SetClientOptions(string options)
+    {
+        _options = new RestClientOptions("https://api.themoviedb.org/3/" + options);
+        _client = new RestClient(_options);
+    }
+
+    private List<MovieDto> GetMovieList(string jsonResponse)
+    {
+        if (jsonResponse == null)
+            return null;
+        var responseObject = JsonSerializer.Deserialize<MovieSearchDto>(jsonResponse);
+        return responseObject.Results.ToList();
+    }
+
     public async Task<ActionResult<IEnumerable<MovieDto>>> SearchMovieAsync(string movieName)
     {
         byte[] utf8Bytes = Encoding.UTF8.GetBytes(movieName);
@@ -31,31 +45,20 @@ public class TmdbApiService : ITmdbApiService
         
         SetClientOptions($"search/movie?query={utf8EncodedMovieName}");
         var response = await _client.GetAsync(_request);
-        var jsonString = response.Content;
-
-        if (jsonString == null)
-            return null;
-        
-        var responseObject = JsonSerializer.Deserialize<MovieSearchDto>(jsonString);
+        var movieList = GetMovieList(response.Content);
        
-        List<MovieDto> firstFiveMovies = new List<MovieDto>();
-        
-        // iterate trough responseObject.Results
-        int counter = 0;
-        foreach (var movie in responseObject.Results)
-        {
-            firstFiveMovies.Add(movie);
-            counter++;
-            if (counter == 5)
-                break;
-        }
-
-        return firstFiveMovies;
+        // Return the first 5 movies
+        return movieList.Take(5).ToList();
     }
-    
-    private void SetClientOptions(string options)
+
+    public async Task<IEnumerable<MovieDto>> GetRecommendedMoviesAsync(int movieId, List<int> favoriteMovieIds)
     {
-        _options = new RestClientOptions("https://api.themoviedb.org/3/" + options);
-        _client = new RestClient(_options);
+        SetClientOptions($"movie/{movieId}/recommendations");
+        var response = await _client.GetAsync(_request);
+        var movieList = GetMovieList(response.Content);
+        movieList.RemoveAll(item => favoriteMovieIds.Contains(item.Id));
+        
+        // Return the first 12 movies
+        return movieList.Take(12).ToList();
     }
 }
