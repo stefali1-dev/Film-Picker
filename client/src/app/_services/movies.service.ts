@@ -19,7 +19,7 @@ export class MoviesService {
   }
 
   getMovieDetails(movieId: number) {
-    return this.http.get<Movie>(this.baseUrl + `movies/${movieId}`);
+    return this.http.get<Movie>(this.baseUrl + 'movie/' + movieId);
   }
 
   addPosterPrefix(movieList: Movie[]) {
@@ -30,4 +30,5 @@ export class MoviesService {
       }
     }
   }
+
 }

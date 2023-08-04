@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Movie} from "../../_models/movie";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-movie-card',
@@ -9,4 +10,8 @@ import {Movie} from "../../_models/movie";
 export class MovieCardComponent {
   @Input() movie: Movie | undefined;
 
+  constructor(private router: Router) { }
+  goToMovieDetails() {
+    this.router.navigate(['/movies/', this.movie?.id]);
+  }
 }

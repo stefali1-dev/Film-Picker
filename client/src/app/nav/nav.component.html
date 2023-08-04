@@ -10,10 +10,10 @@
                [routerLink]="['/']" routerLinkActive="active">Home</a></li>
 
         <ng-container *ngIf="accountService.currentUser$ | async">
-          <li><a href="#" class="nav-link px-2 link-body-emphasis"
+          <li><a class="nav-link px-2 link-body-emphasis"
                  [routerLink]="['/movies']" routerLinkActive="active">Recommendations</a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis"
-                 [routerLink]="['/movie-picker']" routerLinkActive="active">Movie Picker</a></li>
+          <li><a class="nav-link px-2 link-body-emphasis" style="cursor: pointer;"
+                 (click)="pickRandomRecommendedMovie()" routerLinkActive="active">Movie Picker</a></li>
         </ng-container>
 
         <li><a href="#" class="nav-link px-2 link-body-emphasis"

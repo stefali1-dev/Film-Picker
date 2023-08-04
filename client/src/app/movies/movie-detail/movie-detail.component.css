@@ -1,0 +1,5 @@
+.img-cover {
+  object-fit: cover;
+  /* Set a fixed height for the image container (e.g., 250px) */
+  height: 500px;
+}

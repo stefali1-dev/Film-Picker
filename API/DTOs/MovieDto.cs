@@ -10,8 +10,8 @@ public class MovieDto
     [JsonPropertyName("backdrop_path")]
     public string BackdropPath { get; set; }
 
-    [JsonPropertyName("genre_ids")]
-    public List<int> GenreIds { get; set; }
+    [JsonPropertyName("genres")]
+    public List<Genre> Genres { get; set; }
 
     [JsonPropertyName("id")]
     public int Id { get; set; }
@@ -45,4 +45,12 @@ public class MovieDto
 
     [JsonPropertyName("vote_count")]
     public int VoteCount { get; set; }
+}
+
+public class Genre
+{
+    [JsonPropertyName("id")] 
+    public int Id { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }

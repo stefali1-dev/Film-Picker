@@ -28,4 +28,11 @@ public class MovieController : BaseApiController
         return await _tmdbApiService.SearchMovieAsync(movieName);
     }
     
+    [AllowAnonymous]
+    [HttpGet("{movieId}")] // GET: api/movie/{movieId}
+    public async Task<ActionResult<MovieDto>> GetMovie(int movieId)
+    {
+        return await _tmdbApiService.GetMovieDetailsAsync(movieId);
+    }
+    
 }

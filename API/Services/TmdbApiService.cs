@@ -61,4 +61,17 @@ public class TmdbApiService : ITmdbApiService
         // Return the first 12 movies
         return movieList.Take(12).ToList();
     }
+
+    public async Task<ActionResult<MovieDto>> GetMovieDetailsAsync(int movieId)
+    {
+        // movie/27205
+        SetClientOptions($"movie/{movieId}");
+        var responseJson = (await _client.GetAsync(_request)).Content;
+        
+        if (responseJson == null) // return not found
+            return new NotFoundResult();
+        var movieResponseObject = JsonSerializer.Deserialize<MovieDto>(responseJson);
+
+        return movieResponseObject;
+    }
 }

@@ -1,4 +1,4 @@
-<div class="card mb-4" *ngIf="movie">
+<div class="card mb-4" *ngIf="movie" (click)="this.goToMovieDetails()">
   <div class="card-img-wrapper">
     <img src="{{movie.poster_path}}" alt="{{movie.title}}" class="card-img-top">
   </div>
