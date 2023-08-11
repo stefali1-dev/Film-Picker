@@ -55,7 +55,7 @@ export class RegisterComponent {
   }
 
   model: any = {};
-  registered = true;
+  registered = false;
   retypedPassword = '';
   constructor(private accountService: AccountService, private router: Router) {
 
@@ -101,8 +101,13 @@ export class RegisterComponent {
     console.log(this.model)
 
     this.accountService.register(this.model).subscribe(response => {
-      console.log(response);
       this.registered = true;
+      // login now
+      this.accountService.login(this.model).subscribe(response => {
+        console.log("Registered and logged in");
+      }, error => {
+        console.log(error);
+      });
     }
     , error => {
       console.log(error);
