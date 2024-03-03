@@ -7,7 +7,7 @@ Welcome to FilmPicker, a .NET web application designed to recommend movies based
 - **RESTful API**: A clean, easy-to-use REST API that allows for integration with the Angular framework.
 - **JWT Authentication**: Secure authentication mechanism using JSON Web Tokens (JWT) to ensure safe access to user-specific recommendations.
 - **AutoMapper**: Simplified object-to-object mappings with AutoMapper.
-- **SQLite Database**: Lightweight database to store user data and movie information.
+- **PostgreSQL Database**: Open source object-relational database to store user data and movie information.
 
 
 ### Usage
